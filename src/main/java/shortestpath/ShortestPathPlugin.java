@@ -81,6 +81,7 @@ public class ShortestPathPlugin extends Plugin {
 
     public Pathfinder pathfinder;
     public Pathfinder.Path currentPath;
+    private boolean manualStart = false;
 
     private Point lastMenuOpenedPoint;
     public WorldMapPoint marker;
@@ -167,7 +168,7 @@ public class ShortestPathPlugin extends Plugin {
             currentPath = null;
         }
 
-        if (!isNearPath(currentLocation)) {
+        if (!isNearPath(currentLocation) && !manualStart) {
             if (config.cancelInstead()) {
                 currentPath = null;
                 return;
@@ -248,14 +249,17 @@ public class ShortestPathPlugin extends Plugin {
 
         if (entry.getOption().equals(SET) && entry.getTarget().equals(TARGET)) {
             setTarget(getSelectedWorldPoint());
+            manualStart = false;
         }
 
         if (entry.getOption().equals(SET) && entry.getTarget().equals(START)) {
             currentPath = pathfinder.new Path(getSelectedWorldPoint(), currentPath.target, config.avoidWilderness());
+            manualStart = true;
         }
 
         if (entry.getOption().equals(CLEAR) && entry.getTarget().equals(PATH)) {
             setTarget(null);
+            manualStart = false;
         }
 
         if (entry.getType() != MenuAction.WALK) {
