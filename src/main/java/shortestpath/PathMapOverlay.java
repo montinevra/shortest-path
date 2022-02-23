@@ -121,23 +121,23 @@ public class PathMapOverlay extends Overlay {
         for (EdgeCheck edge : edgeChecks){
             final float r = edge.q / edge.p;
             if (edge.p == 0 && edge.q < 0) {
-                return (null);
+                return null;
             }
             if (edge.p < 0){
                 if (r > t1) {
-                    return (null);
+                    return null;
                 } else if (r > t0) {
                     t0 = r;
                 }
             } else if (edge.p > 0) {
                 if (r < t0) {
-                    return (null);
+                    return null;
                 } else if (r < t1) {
                     t1 = r;
                 }
             }
         }
-        return (new Line2D.Float(x0 + t0 * xDelta, y0 + t0 * yDelta, x0 + t1 * xDelta, y0 + t1 * yDelta));
+        return new Line2D.Float(x0 + t0 * xDelta, y0 + t0 * yDelta, x0 + t1 * xDelta, y0 + t1 * yDelta);
     }
 
     private void drawOnMap(Graphics2D graphics, WorldPoint point, Color color) {
