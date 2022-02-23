@@ -64,7 +64,7 @@ public class PathMapOverlay extends Overlay {
                     if (mapB == null) {
                         continue;
                     }
-                    Line2D line = clipLine(mapA.getX(), mapA.getY(), mapB.getX(), mapB.getY(), mapClipArea.getBounds());
+                    final Line2D line = clipLine(mapA.getX(), mapA.getY(), mapB.getX(), mapB.getY(), mapClipArea.getBounds());
                     if (line != null){
                         graphics.drawLine((int)line.getX1(), (int)line.getY1(), (int)line.getX2(), (int)line.getY2());
                     }
@@ -95,13 +95,12 @@ public class PathMapOverlay extends Overlay {
     }
 
     // Liang-Barsky line clipping algorithm
-    // Returns a Line2D clipped to a Rectangle, null if the line does not intersect the rectangle
+    // Returns a Line2D clipped to a Rectangle, or null if the line does not intersect the rectangle
     private Line2D clipLine(float x0, float y0, float x1, float y1, Rectangle rect){
-        Line2D line = new Line2D.Float();
         float t0 = 0.0f;
         float t1 = 1.0f;
-        float xDelta = x1 - x0;
-        float yDelta = y1 - y0;
+        final float xDelta = x1 - x0;
+        final float yDelta = y1 - y0;
         class EdgeCheck{
             public final float p;
             public final float q;
@@ -112,7 +111,7 @@ public class PathMapOverlay extends Overlay {
                 this.q = q;
             }
         }
-        EdgeCheck[] edgeChecks = {
+        final EdgeCheck[] edgeChecks = {
                 new EdgeCheck(-xDelta, -((float)rect.getMinX() - x0)),
                 new EdgeCheck(xDelta, ((float)rect.getMaxX() - x0)),
                 new EdgeCheck(-yDelta, -((float)rect.getMinY() - y0)),
@@ -120,7 +119,7 @@ public class PathMapOverlay extends Overlay {
         };
 
         for (EdgeCheck edge : edgeChecks){
-            float r = edge.q / edge.p;
+            final float r = edge.q / edge.p;
             if (edge.p == 0 && edge.q < 0) {
                 return (null);
             }
@@ -138,8 +137,7 @@ public class PathMapOverlay extends Overlay {
                 }
             }
         }
-        line.setLine(x0 + t0 * xDelta, y0 + t0 * yDelta, x0 + t1 * xDelta, y0 + t1 * yDelta);
-        return (line);
+        return (new Line2D.Float(x0 + t0 * xDelta, y0 + t0 * yDelta, x0 + t1 * xDelta, y0 + t1 * yDelta));
     }
 
     private void drawOnMap(Graphics2D graphics, WorldPoint point, Color color) {
